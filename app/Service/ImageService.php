@@ -44,19 +44,19 @@ class ImageService
          */
         DB::table($this->img_table)->insert([
             'url'   => $url,
-            'group' => $recv['group']
+            'gid' => $recv['gid']
         ]);
 
         /**
          * 制作索引
          */
-        $group = DB::table($this->img_table)->where('url', '=', $url)->first()->group;
-        $row = DB::table($this->img_index_table);
-        if($row->where('group', '=', $group)->first() == null){
-            $row->insert([
-                'group' => $group
-            ]);
-        }
+//        $group = DB::table($this->img_table)->where('url', '=', $url)->first()->group;
+//        $row = DB::table($this->img_index_table);
+//        if($row->where('group', '=', $group)->first() == null){
+//            $row->insert([
+//                'group' => $group
+//            ]);
+//        }
 
         return true;
     }
@@ -70,7 +70,7 @@ class ImageService
     public function updateImage(array $recv, int $pid) {
         $row    = DB::table($this->img_table)->where('pid', '=', $pid);
         $url    = $row->first()->url;
-        $group  = $row->first()->group;
+        $gid  = $row->first()->gid;
 
         if(isset($recv['url'])){
             $url = $recv['url'];
@@ -83,22 +83,22 @@ class ImageService
             }
         }
 
-        if(isset($recv['group'])){
-            $group = $recv['group'];
+        if(isset($recv['gid'])){
+            $gid = $recv['gid'];
         }
 
         $row->update([
             'url'   => $url,
-            'group' => $group
+            'gid'   => $gid
         ]);
 
         /**
          * 如果有新的组就添加
          */
-        $row = DB::table($this->img_index_table);
-        if($row->where('group', '=', $recv['group'])->first() == null){
-            $row->insert(['group' => $recv['group']]);
-        }
+//        $row = DB::table($this->img_index_table);
+//        if($row->where('group', '=', $recv['group'])->first() == null){
+//            $row->insert(['group' => $recv['group']]);
+//        }
 
         return true;
     }
@@ -124,6 +124,7 @@ class ImageService
         $rows = DB::table($this->img_index_table)
             ->where('gid', '=', $group_id)
             ->join($this->img_table, $this->img_index_table.'.group', '=', $this->img_table.'.group')
+            ->orderBy('pid', 'desc')
             ->get();
 
         $data = [];
@@ -137,17 +138,17 @@ class ImageService
         return $data;
     }
 
-    public function getAllGroupId() {
-        $rows = DB::table($this->img_index_table)->get();
-
-        $data = [];
-        foreach ($rows as $row) {
-            $data []= [
-                'gid'   => $row->gid,
-                'group' => $row->group
-            ];
-        }
-
-        return $data;
-    }
+//    public function getAllGroupId() {
+//        $rows = DB::table($this->img_index_table)->get();
+//
+//        $data = [];
+//        foreach ($rows as $row) {
+//            $data []= [
+//                'gid'   => $row->gid,
+//                'group' => $row->group
+//            ];
+//        }
+//
+//        return $data;
+//    }
 }

@@ -16,6 +16,7 @@ class CreateImgIndexTable extends Migration
         Schema::create('img_index', function (Blueprint $table) {
             $table->increments('gid');
             $table->string('group');
+            $table->timestamps();
         });
     }
 

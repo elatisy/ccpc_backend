@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 include 'Routes/ContentServiceRoute.php';
 include 'Routes/ImageServiceRoute.php';
+include 'Routes/UserServiceRoute.php';
 
 
 

@@ -31,8 +31,9 @@ class ContentService
         foreach ($query as $where => $target){
             $rows = $rows->where($where, '=', $target);
         }
-
-        $rows = $rows->get();
+        $rows = $rows
+                ->orderBy('created_at', 'desc')
+                ->get();
 
         $data = [];
         foreach ($rows as $row){

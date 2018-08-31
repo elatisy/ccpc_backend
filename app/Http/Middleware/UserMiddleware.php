@@ -1,16 +1,10 @@
 <?php
-
-/**
- * status:
- * 0:正常
- * -1:已注销
- * 1:锁定
- */
+//todo:弃用
 namespace App\Http\Middleware;
 
 use Closure;
 
-class UserMiddleWare
+class UserMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,10 +13,8 @@ class UserMiddleWare
      * @param  \Closure  $next
      * @return mixed
      */
-
     public function handle($request, Closure $next)
     {
-
         return $next($request);
     }
 }

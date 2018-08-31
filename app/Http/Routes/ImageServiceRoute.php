@@ -26,5 +26,5 @@ Route::group([
 ],function (){
     Route::get('/pid/{pid}', 'ImageController@getImageByPid');
     Route::get('/groupid/{group_id}', 'ImageController@getImageByGroupId');
-    Route::get('/allgid', 'ImageController@getAllGroupId');
+//    Route::get('/allgid', 'ImageController@getAllGroupId');
 });
