@@ -18,6 +18,7 @@ class TokenMiddleware
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     * @throws NeedLogInException
      * @return mixed
      */
     public function handle($request, Closure $next)

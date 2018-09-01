@@ -17,6 +17,7 @@ Route::group([
         ],function (){
             Route::post('/write/{type}', 'ContentController@writeNewContent');
             Route::post('/update', 'ContentController@updateContent');
+            Route::get('/delete/cid/{cid}', 'ContentController@deleteContent');
         });
 });
 

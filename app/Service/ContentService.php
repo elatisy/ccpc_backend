@@ -82,4 +82,8 @@ class ContentService
         $db->update($new_post);
         return true;
     }
+
+    public function deleteContent(int $cid){
+        DB::table($this->content_table)->where('cid', '=', $cid)->delete();
+    }
 }

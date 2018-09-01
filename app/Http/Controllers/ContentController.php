@@ -67,4 +67,10 @@ class ContentController extends Controller
         return response()->json($return_arr);
     }
 
+    public function deleteContent(int $cid){
+        $this->content_service->deleteContent($cid);
+        return [
+            'code'  => 0
+        ];
+    }
 }
