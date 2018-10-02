@@ -17,6 +17,7 @@ class CreateContestsTable extends Migration
             $table->increments('cid');
 
             $table->string('title');
+            $table->string('year', 10);
             $table->longText('carousel1')->nullable();      //用|分割url和文字
             $table->longText('carousel2')->nullable();
             $table->longText('carousel3')->nullable();

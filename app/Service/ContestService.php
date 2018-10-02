@@ -9,6 +9,8 @@
 namespace App\Service;
 
 use App\Contest;
+use Illuminate\Support\Facades\Redis;
+use App\Service\CacheService;
 //use App\User;
 
 class ContestService
@@ -87,12 +89,6 @@ class ContestService
         return true;
     }
 
-    public function __construct()
-    {
-        $this->contest = new Contest();
-//        $this->user = new User();
-    }
-
     public function getContestInfo(int $cid)
     {
         $row = $this->contest->where('cid', $cid)->first();
@@ -147,5 +143,42 @@ class ContestService
         }
 
         return $data;
+    }
+
+//    public function getCidsByYear(string $year)
+//    {
+//        $rows = $this->contest->where('year', $year)->get();
+//        $data = [];
+//        foreach ($rows as $row) {
+//            $data []= [
+//                'cid'   => $row->cid,
+//                'title' => $row->title
+//            ];
+//            }
+//        return $data;
+//    }
+
+    public function getCidsByYear(string $year)
+    {
+            if(CacheService::isCacheExist($year)) {
+                return array_merge(json_decode(Redis::get($year)), ['from'  => 'Cache']);
+            } else {
+                $rows = $this->contest->where('year', $year)->get();
+                $data = [];
+                foreach ($rows as $row) {
+                    $data []= [
+                        'cid'   => $row->cid,
+                        'title' => $row->title
+                    ];
+                }
+                Redis::set($year, json_encode($data));
+                return array_merge($data, ['from'   => 'Disk']);
+            }
+    }
+
+    public function __construct()
+    {
+        $this->contest = new Contest();
+//        $this->user = new User();
     }
 }

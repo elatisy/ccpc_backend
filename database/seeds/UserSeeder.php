@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
         \App\User::create([
             'name'      => 'admin',
             'account'   => 'admin',
-            'password'  => UserService::encryptPassword('NEUQer2018'),
+            'password'  => UserService::encryptPassword('123456'),
             'token'     => UserService::createToken(),
             'group'     => 1
         ]);

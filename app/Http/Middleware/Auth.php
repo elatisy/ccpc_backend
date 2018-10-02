@@ -25,7 +25,7 @@ class Auth
         }
 
         $user = new User();
-        if($user->where('token', $token)->get() == null) {
+        if($user->where('token', $token)->first() == null) {
             throw new UserNotExistException();
         }
 

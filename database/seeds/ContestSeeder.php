@@ -13,6 +13,7 @@ class ContestSeeder extends Seeder
     {
         \App\Contest::create([
             'title'                     => '赛',
+            'year'                      => '2018',
             'invitation'                => '赛邀请函的url',
             'schedule'                  => '赛的日程安排url',
             'award_list'                => '赛的奖项榜单url',

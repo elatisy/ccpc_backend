@@ -7,6 +7,7 @@ Route::group([
 ], function (){
     Route::get('cid/{cid}', 'ContestController@getContestByCid');
     Route::get('getcids', 'ContestController@getCids');
+    Route::get('year/{year}', 'ContestController@getCidsByYear');
 
     Route::group([
         'middleware'    => ['admin', 'auth']

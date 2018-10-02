@@ -41,4 +41,9 @@ class ContestController extends Controller
             'result'    => true
         ]);
     }
+
+    public function getCidsByYear(string $year)
+    {
+        return response($this->contestService->getCidsByYear($year));
+    }
 }
