@@ -9,21 +9,17 @@
 namespace App\Service;
 
 use App\Contest;
-use Illuminate\Support\Facades\Redis;
-use App\Service\CacheService;
+//use Illuminate\Support\Facades\Redis;
+//use App\Service\CacheService;
 //use App\User;
 
 class ContestService
 {
+
     /**
      * @var Contest
      */
     private $contest;
-
-//    /**
-//     * @var User
-//     */
-//    private $user;
 
     /**轮播图url以及文字信息*/
     private  $carousels = [];
@@ -36,6 +32,11 @@ class ContestService
 
     /**统计信息*/
     private $stats = [];
+
+    //    /**
+    //     * @var User
+    //     */
+    //    private $user;
 
 //    private functions
 
@@ -63,6 +64,22 @@ class ContestService
     }
 
 //    public functions
+
+    public function getShortInfoByCid(int $cid)
+    {
+        $row = $this->contest->where('cid', $cid)->first();
+        return [
+            'title'     => $row->title,
+            'year'      => $row->year,
+            'school'    => $row->school,
+            'date'      => $row->date
+        ];
+    }
+
+    public function deleteContest(int $cid)
+    {
+        $this->contest->where('cid', $cid)->delete();
+    }
 
     public function writeContest(array $new_contest)
     {
@@ -101,7 +118,6 @@ class ContestService
         ];
 
         for($i = 1; $i <= 3; ++$i) {
-
             foreach ($needs as $need => $split) {
                 $result = $this->getInfo($row, $need . $i, $split);
                 if($result != null) {
@@ -109,12 +125,20 @@ class ContestService
                         $this->$var_name []= $result;
                 }
             }
+
+            $key = 'service_image' . $i;
+
+            $this->services[$i - 1] = array_merge($this->services[$i - 1], [$row->$key]);
+
         }
 
         $famous = explode('|', $row->famous);
 
         return [
-            'title'                     => $row->title ,
+            'title'                     => $row->title,
+            'year'                      => $row->year,
+            'school'                    => $row->school,
+            'date'                      => $row->date,
             'invitation'                => $row->invitation,
             'schedule'                  => $row->schedule,
             'award_list'                => $row->award_list,
@@ -130,9 +154,45 @@ class ContestService
         ];
     }
 
+    public function getCidsWithYears()
+    {
+        $rows = $this->contest->orderBy('year', 'desc')->get();
+        $year = $rows[0]->year;
+        $temp = [];
+        $data = [];
+        foreach ($rows as $row) {
+            if($year != $row->year) {
+                $data []= [$year => $temp];
+                $temp = [];
+                $year = $row->year;
+            }
+            $temp []= [
+                'cid'   => $row->cid,
+                'title' => $row->title
+            ];
+        }
+        $data []= [$year => $temp];
+
+        return $data;
+    }
+
+    public function getCidsByYear(string $year)
+    {
+        $rows = $this->contest->where('year', $year)->get();
+        $data = [];
+        foreach ($rows as $row) {
+            $data []= [
+                'cid'   => $row->cid,
+                'title' => $row->title
+            ];
+        }
+
+        return $data;
+    }
+
     public function getCids()
     {
-        $table = $this->contest->select(['cid', 'title'])->get();
+        $table = $this->contest->get();
 
         $data = [];
         foreach ($table as $row) {
@@ -145,40 +205,52 @@ class ContestService
         return $data;
     }
 
-//    public function getCidsByYear(string $year)
-//    {
-//        $rows = $this->contest->where('year', $year)->get();
-//        $data = [];
-//        foreach ($rows as $row) {
-//            $data []= [
-//                'cid'   => $row->cid,
-//                'title' => $row->title
-//            ];
-//            }
-//        return $data;
-//    }
-
-    public function getCidsByYear(string $year)
-    {
-            if(CacheService::isCacheExist($year)) {
-                return array_merge(json_decode(Redis::get($year)), ['from'  => 'Cache']);
-            } else {
-                $rows = $this->contest->where('year', $year)->get();
-                $data = [];
-                foreach ($rows as $row) {
-                    $data []= [
-                        'cid'   => $row->cid,
-                        'title' => $row->title
-                    ];
-                }
-                Redis::set($year, json_encode($data));
-                return array_merge($data, ['from'   => 'Disk']);
-            }
-    }
-
     public function __construct()
     {
         $this->contest = new Contest();
 //        $this->user = new User();
     }
+
+/* 作为备用的Redis版本
+    private $redisTimeLimit = 600;
+
+    public function getCids()
+    {
+        if(CacheService::isCacheExist('cids')) {
+            return json_decode(Redis::get('cids'));
+        } else {
+            $table = $this->contest->select(['cid', 'title'])->get();
+
+            $data = [];
+            foreach ($table as $row) {
+                $data []= [
+                    $row->cid,
+                    $row->title
+                ];
+            }
+
+            Redis::setex('cids', $this->redisTimeLimit, json_encode($data));
+
+            return $data;
+        }
+    }
+
+    public function getCidsByYear(string $year)
+    {
+            if(CacheService::isCacheExist($year)) {
+                return json_decode(Redis::get($year));
+            } else {
+                $rows = $this->contest->where('year', $year)->get();
+                $data = [];
+                foreach ($rows as $row) {
+                    $data []= [
+                        $row->cid,
+                        $row->title
+                    ];
+                }
+                Redis::setex($year, $this->redisTimeLimit, json_encode($data));
+                return $data;
+            }
+    }
+*/
 }

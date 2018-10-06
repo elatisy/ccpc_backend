@@ -14,6 +14,8 @@ class ContestSeeder extends Seeder
         \App\Contest::create([
             'title'                     => '赛',
             'year'                      => '2018',
+            'school'                    => 'wdnb校',
+            'date'                      => '2月30-2月31',
             'invitation'                => '赛邀请函的url',
             'schedule'                  => '赛的日程安排url',
             'award_list'                => '赛的奖项榜单url',
@@ -31,6 +33,9 @@ class ContestSeeder extends Seeder
             'service1'                  => '赛场服务标题1|赛场服务文字1',
             'service2'                  => '赛场服务标题2|赛场服务文字2',
             'service3'                  => '赛场服务标题3|赛场服务文字3',
+            'service_image1'            => '赛场服务图片url1',
+            'service_image2'            => '赛场服务图片url2',
+            'service_image3'            => '赛场服务图片url3',
             'stat1'                     => 123,
             'stat2'                     => 233,
             'stat3'                     => 321

@@ -18,6 +18,8 @@ class CreateContestsTable extends Migration
 
             $table->string('title');
             $table->string('year', 10);
+            $table->string('school');
+            $table->string('date');
             $table->longText('carousel1')->nullable();      //用|分割url和文字
             $table->longText('carousel2')->nullable();
             $table->longText('carousel3')->nullable();
@@ -31,6 +33,9 @@ class CreateContestsTable extends Migration
             $table->longText('service1')->nullable();
             $table->longText('service2')->nullable();
             $table->longText('service3')->nullable();       //用|分割标题和具体内容
+            $table->string('service_image1');
+            $table->string('service_image2');
+            $table->string('service_image3');
             $table->longText('tree_new_bee_text')->nullable();
             $table->string('tree_new_bee_background')->nullable();
             $table->integer('stat1')->nullable();

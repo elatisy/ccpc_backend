@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 include 'Routes/Contests.php';
 include 'Routes/User.php';
+include 'Routes/News.php';
 
 Route::get('/', function () {
     return 'QAQ';

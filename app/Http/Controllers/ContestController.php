@@ -46,4 +46,22 @@ class ContestController extends Controller
     {
         return response($this->contestService->getCidsByYear($year));
     }
+
+    public function getCidsWithYears()
+    {
+        return response($this->contestService->getCidsWithYears());
+    }
+
+    public function deleteContest(int $cid)
+    {
+        $this->contestService->deleteContest($cid);
+        return response([
+            'result'    => true
+        ]);
+    }
+
+    public function getShortInfoByCid(int $cid)
+    {
+        return response($this->contestService->getShortInfoByCid($cid));
+    }
 }
