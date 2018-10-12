@@ -6,6 +6,8 @@ use Closure;
 use App\User;
 use App\Exceptions\UserNotExistException;
 use App\Exceptions\NeedLoginException;
+//use http\Env\Request;
+use Illuminate\Http\Request;
 
 class Auth
 {
@@ -17,8 +19,9 @@ class Auth
      * @throws
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
+//        dd($request);
         $token = $request->header('token');
         if($token == null) {
             throw new NeedLoginException();
